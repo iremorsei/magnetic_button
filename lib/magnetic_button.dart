@@ -18,6 +18,7 @@ class Button extends StatefulWidget {
 }
 
 class _ButtonState extends State<Button> {
+  final mousePositionResult = useMousePosition();
   double? mouseX;
   double? mouseY;
   final textRef = GlobalKey();
@@ -29,6 +30,8 @@ class _ButtonState extends State<Button> {
   @override
   void initState() {
     super.initState();
+    mouseX = mousePositionResult.mouseX as double?;
+    mouseY = mousePositionResult.mouseY as double?;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final RenderBox renderBox =
@@ -89,15 +92,10 @@ class _ButtonState extends State<Button> {
 
   @override
   Widget build(BuildContext context) {
-    return MousePositionExample(
-      onEnter: (event) {
-        mouseX = event.localPosition.dx;
-        mouseY = event.localPosition.dy;
-      },
-      onExit: (_) {
-        mouseX = null;
-        mouseY = null;
-      },
+    return MouseRegion(
+      onEnter: (event) => mousePositionResult.updateMousePosition(event),
+      onExit: (event) => mousePositionResult.updateMousePosition(event),
+      onHover: (event) => mousePositionResult.updateMousePosition(event),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(),
