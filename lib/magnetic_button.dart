@@ -1,143 +1,151 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'dart:math';
 
-import 'components/use_mouse_position.dart';
 import 'components/utils.dart';
 
-class Button extends StatefulWidget {
-  final String href;
+class MagneticButton extends StatefulWidget {
   final Widget child;
+  final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
 
-  const Button({
+  const MagneticButton({
     Key? key,
-    required this.href,
     required this.child,
+    this.innerMagneticButtonKey,
   }) : super(key: key);
 
   @override
-  State<Button> createState() => _ButtonState();
+  State<MagneticButton> createState() => MagneticButtonState();
 }
 
-class _ButtonState extends State<Button> {
-  final mousePositionResult = useMousePosition();
-  double? mouseX;
-  double? mouseY;
-  final textRef = GlobalKey();
-  final fillControls = AnimationController(
-    vsync: AnimatedListState(),
-    duration: const Duration(milliseconds: 550),
-  );
+class MagneticButtonState extends State<MagneticButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+  double _textX = 0.0;
+  double _textY = 0.0;
+
+  bool mouseIsHovering = false;
 
   @override
   void initState() {
     super.initState();
-    mouseX = mousePositionResult.mouseX as double?;
-    mouseY = mousePositionResult.mouseY as double?;
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 600));
+    // Use an easing curve for the animation.
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutCirc,
+      reverseCurve: Curves.easeInCirc,
+    );
+
+    _animationController.addListener(() {
+      setState(() {});
+    });
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          _textX = 0.0;
+          _textY = 0.0;
+        });
+        _animationController.reverse();
+      }
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final RenderBox renderBox =
-          textRef.currentContext?.findRenderObject() as RenderBox;
-      final rect = renderBox.localToGlobal(Offset.zero) & renderBox.size;
-      final distanceToTrigger = rect.width * 0.7;
-      final distanceMouseButton = distance(
-        mouseX! + WidgetsBinding.instance.window.physicalSize.width,
-        mouseY! + WidgetsBinding.instance.window.physicalSize.height,
-        rect.left + rect.width / 2,
-        rect.top + rect.height / 2,
-      );
+      _startMouseListeners();
+    });
+  }
 
-      if (distanceMouseButton < distanceToTrigger) {
-        final x = (mouseX! - (rect.left + rect.width / 2)) * 0.2;
-        final y = (mouseY! - (rect.top + rect.height / 2)) * 0.2;
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
-        textRef.currentContext!.findRenderObject()!.paintBounds
-          ..addOversized(rect, x, y)
-          ..offset(rect.left, rect.top)
-          ..paintTransform = Matrix4.identity()
-          ..addTranslation(x, y);
-        fillControls.animateTo(1, curve: Curves.easeInOut);
-      } else {
-        fillControls.animateTo(0, curve: Curves.easeInOut);
+  void _handleMouseEnter(PointerEnterEvent event) {}
+
+  void _handleMouseLeave(PointerExitEvent event) {
+    mouseIsHovering = false;
+    // Check if mouse is still hovering over inner MagneticButton
+    if (widget.innerMagneticButtonKey != null &&
+        !widget.innerMagneticButtonKey!.currentState!.mouseIsHovering) {
+      setState(() {
+        _textX = 0.0;
+        _textY = 0.0;
+      });
+    }
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (_animationController.isDismissed) {
+        _animationController.forward();
       }
     });
   }
 
-  void _onpress() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final RenderBox renderBox =
-          textRef.currentContext?.findRenderObject() as RenderBox;
-      final rect = renderBox.localToGlobal(Offset.zero) & renderBox.size;
-      final distanceToTrigger = rect.width * 0.7;
-      final distanceMouseButton = distance(
-        mouseX! + WidgetsBinding.instance.window.physicalSize.width,
-        mouseY! + WidgetsBinding.instance.window.physicalSize.height,
-        rect.left + rect.width / 2,
-        rect.top + rect.height / 2,
-      );
-
-      if (distanceMouseButton < distanceToTrigger) {
-        final x = (mouseX! - (rect.left + rect.width / 2)) * 0.2;
-        final y = (mouseY! - (rect.top + rect.height / 2)) * 0.2;
-
-        textRef.currentContext!.findRenderObject()!.paintBounds
-          ..addOversized(rect, x, y)
-          ..offset(rect.left, rect.top)
-          ..paintTransform = Matrix4.identity()
-          ..addTranslation(x, y);
-        fillControls.animateTo(1, curve: Curves.easeInOut);
-      } else {
-        fillControls.animateTo(0, curve: Curves.easeInOut);
+  void _startMouseListeners() {
+    // Listen to mouse events.
+    RendererBinding.instance.pointerRouter.addGlobalRoute((PointerEvent event) {
+      if (event is PointerHoverEvent) {
+        _handleMouseMove(event);
+      } else if (event is PointerEnterEvent) {
+        _handleMouseEnter(event);
+      } else if (event is PointerExitEvent) {
+        _handleMouseLeave(event);
       }
     });
+  }
+
+  void _handleMouseMove(PointerHoverEvent event) {
+    // Get the RenderBox of the widget.
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+
+    // Calculate the distance to trigger the animation.
+    final double distanceToTrigger = renderBox.size.width * 0.7;
+
+    // Calculate the position of the mouse relative to the center of the button.
+    final double relX = event.position.dx -
+        (renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2);
+    final double relY = event.position.dy -
+        (renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2);
+
+    final double distanceMouseButton = distance(
+        event.position.dx,
+        event.position.dy,
+        renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2,
+        renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2);
+
+    if (distanceMouseButton < distanceToTrigger) {
+      // If the mouse is close enough, move the button and its text.
+      setState(() {
+        _textX = relX * 0.2;
+        _textY = relY * 0.2;
+      });
+    } else {
+      // If the mouse is not close enough, reset the button and its text to their original positions.
+      setState(() {
+        _textX = 0.0;
+        _textY = 0.0;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (event) => mousePositionResult.updateMousePosition(event),
-      onExit: (event) => mousePositionResult.updateMousePosition(event),
-      onHover: (event) => mousePositionResult.updateMousePosition(event),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(),
-          // Add other styles as needed
-        ),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: AnimatedBuilder(
-                animation: fillControls,
-                builder: (context, child) {
-                  return FractionalTranslation(
-                    translation: Offset(0, fillControls.value * 0.8),
-                    child: child,
-                  );
-                },
-                child: Container(
-                  color: Colors.blue, // Adjust the color as needed
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                key: textRef,
-                child: Text(
-                  widget.child.toString(),
-                  style: const TextStyle(
-                      // Add text styles as needed
-                      ),
-                ),
-              ),
-            ),
-          ],
+      onEnter: _handleMouseEnter,
+      onExit: _handleMouseLeave,
+      onHover: _handleMouseMove,
+      child: Transform.translate(
+        offset: Offset(
+            _textX * (1 - _animation.value), _textY * (1 - _animation.value)),
+        child: Transform.translate(
+          offset: Offset(_textX / 4 * (1 - _animation.value),
+              _textY / 4 * (1 - _animation.value)),
+          child: widget.child,
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    fillControls.dispose();
-    super.dispose();
   }
 }
