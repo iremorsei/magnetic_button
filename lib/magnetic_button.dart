@@ -1,3 +1,5 @@
+library magnetic_button;
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,7 +7,6 @@ import 'dart:math';
 
 class MagneticButton extends StatefulWidget {
   final Widget child;
-
   final int returnDuration;
   final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
 
@@ -77,21 +78,13 @@ class MagneticButtonState extends State<MagneticButton>
         _textX = 0.0;
         _textY = 0.0;
       });
-      Future.delayed(Duration(milliseconds: widget.returnDuration), () {
-        if (_animationController.status != AnimationStatus.forward) {
-          _animationController.forward();
-        }
-      });
+      if (_animationController.status != AnimationStatus.forward) {
+        _animationController.forward();
+      }
     }
   }
 
   void _startMouseListeners() {
-    // Get the RenderBox of the widget.
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
-
-    // Calculate the distance to trigger the animation.
-    final double distanceToTrigger = renderBox.size.width * 0.7;
-
     // Listen to mouse events.
     RendererBinding.instance.pointerRouter.addGlobalRoute((PointerEvent event) {
       if (event is PointerHoverEvent) {
@@ -152,23 +145,18 @@ class MagneticButtonState extends State<MagneticButton>
       onEnter: _handleMouseEnter,
       onExit: _handleMouseLeave,
       onHover: _handleMouseMove,
-      child: AnimatedBuilder(
-        animation: _animationController,
-        builder: (BuildContext context, Widget? child) {
-          final offsetTween = Tween<Offset>(
-            begin: Offset(_textX * (1 - _animation.value),
-                _textY * (1 - _animation.value)),
-            end: Offset.zero,
-          );
-          return Transform.translate(
-            offset: offsetTween.transform(_animationController.value),
-            child: Transform.translate(
-              offset: Offset(_textX / 4 * (1 - _animation.value),
-                  _textY / 4 * (1 - _animation.value)),
-              child: widget.child,
-            ),
-          );
-        },
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: widget.returnDuration),
+        transform: Matrix4.translationValues(
+          _textX * (1 - _animation.value),
+          _textY * (1 - _animation.value),
+          0.0,
+        ),
+        child: Transform.translate(
+          offset: Offset(_textX / 4 * (1 - _animation.value),
+              _textY / 4 * (1 - _animation.value)),
+          child: widget.child,
+        ),
       ),
     );
   }
