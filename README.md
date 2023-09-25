@@ -1,40 +1,35 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Magnetic Button
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+The Magnetic Button is a custom Flutter widget that creates an interactive button with a "magnetic" effect. When you hover over the button, it moves in response to the mouse position, creating a unique and engaging user experience.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+- **Hover Effect**: The button moves in response to the mouse position when hovered over, creating a "magnetic" effect.
+- **Return Duration**: When the mouse is not hovering over the widget, the button returns to its original position. The speed at which it returns is controlled by the `returnDuration` property. This property is set in milliseconds, so a larger value will make the return slower, and a smaller value will make it faster.
+- **Customizable**: You can customize the child widget of the Magnetic Button to fit your needs.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+1. First, create a `MagneticButton` widget and pass in your desired child widget:
 
-```dart
-const like = 'sample';
-```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
-"# magnetic_buttton" 
+   ```dart
+   MagneticButton(
+     child: Container(
+       decoration: BoxDecoration(
+         borderRadius: BorderRadius.all(Radius.circular(40)),
+         color: Color(0xFF1c1d20),
+         border: Border.all(color: Color(0xFF303032))
+       ),
+       width: 160,
+       height: 80,
+       child: Center(
+         child: Text(
+           'Explore',
+           style: TextStyle(
+             fontWeight: FontWeight.w400,
+             fontSize: 19,
+           ),
+         ),
+       ),
+     ),
+   )
