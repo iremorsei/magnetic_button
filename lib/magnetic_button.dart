@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:math';
 
-import 'components/utils.dart';
-
 class MagneticButton extends StatefulWidget {
   final Widget child;
+
+  final int returnDuration;
   final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
 
   const MagneticButton({
     Key? key,
     required this.child,
+    this.returnDuration = 200,
     this.innerMagneticButtonKey,
   }) : super(key: key);
 
@@ -46,11 +47,11 @@ class MagneticButtonState extends State<MagneticButton>
     });
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        setState(() {
-          _textX = 0.0;
-          _textY = 0.0;
+        Future.delayed(Duration(milliseconds: widget.returnDuration), () {
+          if (_animationController.status != AnimationStatus.forward) {
+            _animationController.reverse();
+          }
         });
-        _animationController.reverse();
       }
     });
 
@@ -76,15 +77,21 @@ class MagneticButtonState extends State<MagneticButton>
         _textX = 0.0;
         _textY = 0.0;
       });
+      Future.delayed(Duration(milliseconds: widget.returnDuration), () {
+        if (_animationController.status != AnimationStatus.forward) {
+          _animationController.forward();
+        }
+      });
     }
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (_animationController.isDismissed) {
-        _animationController.forward();
-      }
-    });
   }
 
   void _startMouseListeners() {
+    // Get the RenderBox of the widget.
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+
+    // Calculate the distance to trigger the animation.
+    final double distanceToTrigger = renderBox.size.width * 0.7;
+
     // Listen to mouse events.
     RendererBinding.instance.pointerRouter.addGlobalRoute((PointerEvent event) {
       if (event is PointerHoverEvent) {
@@ -109,6 +116,14 @@ class MagneticButtonState extends State<MagneticButton>
         (renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2);
     final double relY = event.position.dy -
         (renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2);
+
+    // Calculate the distance between the mouse and the center of the button.
+    double distance(double x1, double y1, double x2, double y2) {
+      var a = x1 - x2;
+      var b = y1 - y2;
+
+      return sqrt(pow(a, 2) + pow(b, 2));
+    }
 
     final double distanceMouseButton = distance(
         event.position.dx,
@@ -137,14 +152,23 @@ class MagneticButtonState extends State<MagneticButton>
       onEnter: _handleMouseEnter,
       onExit: _handleMouseLeave,
       onHover: _handleMouseMove,
-      child: Transform.translate(
-        offset: Offset(
-            _textX * (1 - _animation.value), _textY * (1 - _animation.value)),
-        child: Transform.translate(
-          offset: Offset(_textX / 4 * (1 - _animation.value),
-              _textY / 4 * (1 - _animation.value)),
-          child: widget.child,
-        ),
+      child: AnimatedBuilder(
+        animation: _animationController,
+        builder: (BuildContext context, Widget? child) {
+          final offsetTween = Tween<Offset>(
+            begin: Offset(_textX * (1 - _animation.value),
+                _textY * (1 - _animation.value)),
+            end: Offset.zero,
+          );
+          return Transform.translate(
+            offset: offsetTween.transform(_animationController.value),
+            child: Transform.translate(
+              offset: Offset(_textX / 4 * (1 - _animation.value),
+                  _textY / 4 * (1 - _animation.value)),
+              child: widget.child,
+            ),
+          );
+        },
       ),
     );
   }
