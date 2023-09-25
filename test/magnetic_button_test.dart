@@ -14,7 +14,7 @@ void main() {
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(40)),
-                    color: const Color(0xFF1c1d20),
+                    color: Colors.white,
                     border: Border.all(color: const Color(0xFF303032))),
                 width: 160,
                 height: 80,

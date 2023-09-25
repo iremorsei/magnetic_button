@@ -10,15 +10,18 @@ The Magnetic Button is a custom Flutter widget that creates an interactive butto
 
 ## Usage
 
+1. First, create a GlobalKey<MagneticButtonState>:
+   ```dart
+   final innerMagneticButtonKeys = GlobalKey<MagneticButtonState>();
 
-1. First, create a `MagneticButton` widget and pass in your desired child widget:
+2. Third, create a `MagneticButton` widget and pass in your desired child widget:
 
    ```dart
    MagneticButton(
      child: Container(
        decoration: BoxDecoration(
          borderRadius: BorderRadius.all(Radius.circular(40)),
-         color: Color(0xFF1c1d20),
+         color: Colors.white,
          border: Border.all(color: Color(0xFF303032))
        ),
        width: 160,
