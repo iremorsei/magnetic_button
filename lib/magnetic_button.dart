@@ -113,39 +113,36 @@ class MagneticButtonState extends State<MagneticButton>
   }
 
   void _handleMouseMove(PointerHoverEvent event) {
+    if (!mounted) return;
+
     // Get the RenderBox of the widget.
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
 
     // Calculate the distance to trigger the animation.
     final double distanceToTrigger = renderBox.size.width * 0.7;
 
-    // Calculate the position of the mouse relative to the center of the button.
-    final double relX = event.position.dx -
-        (renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2);
-    final double relY = event.position.dy -
-        (renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2);
-
-    // final double relX = event.position.dx -
-    //     ((renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2)) *
-    //         widget.mx;
-    // final double relY = event.position.dy -
-    //     ((renderBox.localToGlobal(Offset.zero).dy +
-    //             renderBox.size.height / 2)) *
-    //         widget.my;
+    // Get the global position of the widget.
+    final Offset globalPosition = renderBox.localToGlobal(Offset.zero);
 
     final double distanceMouseButton = distance(
         event.position.dx,
         event.position.dy,
-        renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2,
-        renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2);
+        globalPosition.dx + renderBox.size.width / 2,
+        globalPosition.dy + renderBox.size.height / 2);
 
     if (distanceMouseButton < distanceToTrigger) {
+      // Calculate the position of the mouse relative to the center of the button.
+      final double relX =
+          event.position.dx - (globalPosition.dx + renderBox.size.width / 2);
+      final double relY =
+          event.position.dy - (globalPosition.dy + renderBox.size.height / 2);
+
       // If the mouse is close enough, move the button and its text.
       setState(() {
         _textX = relX * 0.2;
         _textY = relY * 0.2;
       });
-    } else {
+    } else if (_textX != 0.0 || _textY != 0.0) {
       // If the mouse is not close enough, reset the button and its text to their original positions.
       setState(() {
         _textX = 0.0;
@@ -154,32 +151,37 @@ class MagneticButtonState extends State<MagneticButton>
     }
   }
 
-  void _handleHoldMove(LongPressStartDetails details) {
+  void _handleHoldMove(LongPressMoveUpdateDetails details) {
+    if (!mounted) return;
+
     // Get the RenderBox of the widget.
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
 
     // Calculate the distance to trigger the animation.
     final double distanceToTrigger = renderBox.size.width * 0.7;
 
-    // Calculate the position of the mouse relative to the center of the button.
-    final double relX = details.localPosition.dx -
-        (renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2);
-    final double relY = details.localPosition.dy -
-        (renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2);
+    // Get the global position of the widget.
+    final Offset globalPosition = renderBox.localToGlobal(Offset.zero);
 
     final double distanceMouseButton = distance(
         details.localPosition.dx,
         details.localPosition.dy,
-        renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2,
-        renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2);
+        globalPosition.dx + renderBox.size.width / 2,
+        globalPosition.dy + renderBox.size.height / 2);
 
     if (distanceMouseButton < distanceToTrigger) {
+      // Calculate the position of the mouse relative to the center of the button.
+      final double relX = details.localPosition.dx -
+          (globalPosition.dx + renderBox.size.width / 2);
+      final double relY = details.localPosition.dy -
+          (globalPosition.dy + renderBox.size.height / 2);
+
       // If the mouse is close enough, move the button and its text.
       setState(() {
         _textX = relX * 0.2;
         _textY = relY * 0.2;
       });
-    } else {
+    } else if (_textX != 0.0 || _textY != 0.0) {
       // If the mouse is not close enough, reset the button and its text to their original positions.
       setState(() {
         _textX = 0.0;
@@ -216,7 +218,7 @@ class MagneticButtonState extends State<MagneticButton>
 
   Widget _buildMobile() {
     return GestureDetector(
-      onLongPressStart: (details) => _handleHoldMove(details),
+      onLongPressMoveUpdate: (details) => _handleHoldMove(details),
       onLongPressEnd: (details) => _handleHoldLeave(),
       child: _buildAnimatedContainer(),
     );
