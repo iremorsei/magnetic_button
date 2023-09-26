@@ -3,7 +3,7 @@ library magnetic_button;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'dart:math';
+import 'components/utils.dart';
 
 class MagneticButton extends StatefulWidget {
   final Widget child;
@@ -109,14 +109,6 @@ class MagneticButtonState extends State<MagneticButton>
         (renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2);
     final double relY = event.position.dy -
         (renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2);
-
-    // Calculate the distance between the mouse and the center of the button.
-    double distance(double x1, double y1, double x2, double y2) {
-      var a = x1 - x2;
-      var b = y1 - y2;
-
-      return sqrt(pow(a, 2) + pow(b, 2));
-    }
 
     final double distanceMouseButton = distance(
         event.position.dx,
