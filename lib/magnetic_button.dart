@@ -8,14 +8,32 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 class MagneticButton extends StatefulWidget {
   final Widget child;
+
+  /// The horizontal offset of the magnetic widget.
   final double mx;
+
+  /// The vertical offset of the magnetic widget.
   final double my;
+
+  /// The duration of the animation.
   final Duration duration;
+
+  /// The curve of the animation.
   final Curve curve;
-  final double? height; // new
-  final double? width; // new
-  final EdgeInsets? padding; // new
+
+  /// The height of the magnetic widget. This is an optional parameter.
+  final double? height;
+
+  /// The width of the magnetic widget. This is an optional parameter.
+  final double? width;
+
+  /// The padding around the magnetic widget. This is an optional parameter.
+  final EdgeInsets? padding;
+
+  /// A boolean value indicating whether the widget should respond to long press events on mobile. If false only Web will work.
   final bool mobile;
+
+  /// A global key used to access the state of an inner MagneticButton. This is an optional parameter. final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
   final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
 
   const MagneticButton({
@@ -190,14 +208,16 @@ class MagneticButtonState extends State<MagneticButton>
     }
   }
 
-  void _handleHoldLeave() => setState(() => {
-        setState(() {
-          _textX = 0.0;
-          _textY = 0.0;
-        }),
-        if (_animationController.status != AnimationStatus.forward)
-          {_animationController.forward()}
-      });
+  void _handleHoldLeave() {
+    setState(() {
+      _textX = 0.0;
+      _textY = 0.0;
+    });
+
+    if (_animationController.status != AnimationStatus.forward) {
+      _animationController.forward();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
