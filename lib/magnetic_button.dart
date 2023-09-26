@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'components/utils.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class MagneticButton extends StatefulWidget {
   final Widget child;
@@ -153,25 +154,40 @@ class MagneticButtonState extends State<MagneticButton>
 
   @override
   Widget build(BuildContext context) {
+    return kIsWeb ? _buildWeb() : _buildMobile();
+  }
+
+  Widget _buildWeb() {
     return MouseRegion(
-      onEnter: _handleMouseEnter,
-      onExit: _handleMouseLeave,
-      onHover: _handleMouseMove,
-      child: AnimatedContainer(
-        duration: widget.duration,
-        height: widget.height,
-        width: widget.width,
-        padding: widget.padding,
-        transform: Matrix4.translationValues(
-          _textX * (1 - _animation.value),
-          _textY * (1 - _animation.value),
-          0.0,
-        ),
-        child: Transform.translate(
-          offset: Offset(_textX / 4 * (1 - _animation.value),
-              _textY / 4 * (1 - _animation.value)),
-          child: widget.child,
-        ),
+        onEnter: _handleMouseEnter,
+        onExit: _handleMouseLeave,
+        onHover: _handleMouseMove,
+        child: _buildAnimatedContainer());
+  }
+
+  Widget _buildMobile() {
+    return GestureDetector(
+      onLongPressStart: (details) => _setPointer(details),
+      onLongPressEnd: (details) => _resetPointer(),
+      child: _buildAnimatedContainer(),
+    );
+  }
+
+  Widget _buildAnimatedContainer() {
+    return AnimatedContainer(
+      duration: widget.duration,
+      height: widget.height,
+      width: widget.width,
+      padding: widget.padding,
+      transform: Matrix4.translationValues(
+        _textX * (1 - _animation.value),
+        _textY * (1 - _animation.value),
+        0.0,
+      ),
+      child: Transform.translate(
+        offset: Offset(_textX / 4 * (1 - _animation.value),
+            _textY / 4 * (1 - _animation.value)),
+        child: widget.child,
       ),
     );
   }
