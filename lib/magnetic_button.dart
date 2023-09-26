@@ -7,13 +7,25 @@ import 'components/utils.dart';
 
 class MagneticButton extends StatefulWidget {
   final Widget child;
-  final int returnDuration;
+  final double mx;
+  final double my;
+  final Duration duration;
+  final Curve curve;
+  final double? height; // new
+  final double? width; // new
+  final EdgeInsets? padding; // new
   final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
 
   const MagneticButton({
     Key? key,
     required this.child,
-    this.returnDuration = 200,
+    this.mx = 0.0,
+    this.my = 0.0,
+    this.duration = const Duration(milliseconds: 200),
+    this.curve = Curves.linear,
+    this.height,
+    this.width,
+    this.padding,
     this.innerMagneticButtonKey,
   }) : super(key: key);
 
@@ -48,7 +60,7 @@ class MagneticButtonState extends State<MagneticButton>
     });
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Future.delayed(Duration(milliseconds: widget.returnDuration), () {
+        Future.delayed(widget.duration, () {
           if (_animationController.status != AnimationStatus.forward) {
             _animationController.reverse();
           }
@@ -106,9 +118,11 @@ class MagneticButtonState extends State<MagneticButton>
 
     // Calculate the position of the mouse relative to the center of the button.
     final double relX = event.position.dx -
-        (renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2);
+        (renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2) *
+            widget.mx;
     final double relY = event.position.dy -
-        (renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2);
+        (renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2) *
+            widget.mx;
 
     final double distanceMouseButton = distance(
         event.position.dx,
@@ -138,7 +152,10 @@ class MagneticButtonState extends State<MagneticButton>
       onExit: _handleMouseLeave,
       onHover: _handleMouseMove,
       child: AnimatedContainer(
-        duration: Duration(milliseconds: widget.returnDuration),
+        duration: widget.duration,
+        height: widget.height,
+        width: widget.width,
+        padding: widget.padding,
         transform: Matrix4.translationValues(
           _textX * (1 - _animation.value),
           _textY * (1 - _animation.value),
