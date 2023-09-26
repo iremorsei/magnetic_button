@@ -6,10 +6,15 @@ The Magnetic Button is a custom Flutter widget that creates an interactive butto
 
 | Android | iOS | MacOS | Web | Linux | Windows |
 | :-----: | :-: | :---: | :-: | :---: | :-----: |
-|   ❌   | ❌  |  ✅   | ✅ |  ✅   |  ✅    |
+|   ❓   | ❓  |  ✅   | ✅ |  ✅   |  ✅    |
 
 
 ![preview](https://github.com/darksabotage1/assets/assets/136040945/f1bb1ebf-2d10-4f20-badb-9f00e703e625)
+
+
+## Untested Features
+
+- **On-Hold Magnetic Effect (Mobile)**: We’re planning to add an on-hold magnetic effect primarily designed for mobile devices. This feature will allow the button to continue moving in response to touch gestures, creating a more interactive user experience on mobile platforms.
 
 
 ## Features
