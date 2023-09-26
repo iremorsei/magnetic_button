@@ -2,6 +2,12 @@
 
 The Magnetic Button is a custom Flutter widget that creates an interactive button with a "magnetic" effect. When you hover over the button, it moves in response to the mouse position, creating a unique and engaging user experience.
 
+#### Platform Support
+
+| Android | iOS | MacOS | Web | Linux | Windows |
+| :-----: | :-: | :---: | :-: | :---: | :-----: |
+|   ❌   | ❌  |  ✅   | ✅ |  ✅   |  ✅    |
+
 
 ![preview](https://github.com/darksabotage1/assets/assets/136040945/f1bb1ebf-2d10-4f20-badb-9f00e703e625)
 

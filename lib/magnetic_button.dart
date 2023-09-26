@@ -15,6 +15,7 @@ class MagneticButton extends StatefulWidget {
   final double? height; // new
   final double? width; // new
   final EdgeInsets? padding; // new
+  final bool mobile;
   final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
 
   const MagneticButton({
@@ -23,11 +24,12 @@ class MagneticButton extends StatefulWidget {
     this.mx = 1.0,
     this.my = 1.0,
     this.duration = const Duration(milliseconds: 200),
-    this.curve = Curves.linear,
+    this.curve = Curves.easeOutCirc,
     this.height,
     this.width,
     this.padding,
     this.innerMagneticButtonKey,
+    this.mobile = true,
   }) : super(key: key);
 
   @override
@@ -52,8 +54,8 @@ class MagneticButtonState extends State<MagneticButton>
     // Use an easing curve for the animation.
     _animation = CurvedAnimation(
       parent: _animationController,
-      curve: Curves.easeOutCirc,
-      reverseCurve: Curves.easeInCirc,
+      curve: widget.curve,
+      reverseCurve: widget.curve,
     );
 
     _animationController.addListener(() {
@@ -152,9 +154,56 @@ class MagneticButtonState extends State<MagneticButton>
     }
   }
 
+  void _handleHoldMove(LongPressStartDetails details) {
+    // Get the RenderBox of the widget.
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+
+    // Calculate the distance to trigger the animation.
+    final double distanceToTrigger = renderBox.size.width * 0.7;
+
+    // Calculate the position of the mouse relative to the center of the button.
+    final double relX = details.localPosition.dx -
+        (renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2);
+    final double relY = details.localPosition.dy -
+        (renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2);
+
+    final double distanceMouseButton = distance(
+        details.localPosition.dx,
+        details.localPosition.dy,
+        renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2,
+        renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2);
+
+    if (distanceMouseButton < distanceToTrigger) {
+      // If the mouse is close enough, move the button and its text.
+      setState(() {
+        _textX = relX * 0.2;
+        _textY = relY * 0.2;
+      });
+    } else {
+      // If the mouse is not close enough, reset the button and its text to their original positions.
+      setState(() {
+        _textX = 0.0;
+        _textY = 0.0;
+      });
+    }
+  }
+
+  void _handleHoldLeave() => setState(() => {
+        setState(() {
+          _textX = 0.0;
+          _textY = 0.0;
+        }),
+        if (_animationController.status != AnimationStatus.forward)
+          {_animationController.forward()}
+      });
+
   @override
   Widget build(BuildContext context) {
-    return kIsWeb ? _buildWeb() : _buildMobile();
+    return kIsWeb
+        ? _buildWeb()
+        : widget.mobile
+            ? _buildMobile()
+            : _buildWeb();
   }
 
   Widget _buildWeb() {
@@ -167,8 +216,8 @@ class MagneticButtonState extends State<MagneticButton>
 
   Widget _buildMobile() {
     return GestureDetector(
-      onLongPressStart: (details) => _setPointer(details),
-      onLongPressEnd: (details) => _resetPointer(),
+      onLongPressStart: (details) => _handleHoldMove(details),
+      onLongPressEnd: (details) => _handleHoldLeave(),
       child: _buildAnimatedContainer(),
     );
   }
