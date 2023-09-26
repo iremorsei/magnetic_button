@@ -1,3 +1,29 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* Magnetic Button initial release.
+
+## 0.0.2
+
+* Description Update
+
+## 0.0.3
+
+* Initial Feature Updates with Bugs
+
+## 0.0.4
+### Added
+- New properties for the magnetic widget:
+  - `duration`: The duration of the animation.
+  - `curve`: The curve of the animation.
+  - `height`: The height of the magnetic widget. This is an optional parameter.
+  - `width`: The width of the magnetic widget. This is an optional parameter.
+  - `padding`: The padding around the magnetic widget. This is an optional parameter.
+  - `mobile`: A boolean value indicating whether the widget should respond to long press events on mobile(not yet tested for functionality). If false, only Web will work.
+### Improved
+- Performance optimizations in the code:
+  - reduced the number of times renderBox.localToGlobal(Offset.zero) is called
+  - moved the calculations for relX and relY inside the if (distanceMouseButton < distanceToTrigger) statement, so they’re only calculated if necessary.
+
+### To Do
+- Implement the `mx` and `my` variables in the code for additional user experience.
+- test hold feature on a live mobile device.
