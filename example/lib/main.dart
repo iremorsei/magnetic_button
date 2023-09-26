@@ -33,6 +33,7 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: MagneticButton(
           key: innerMagneticButtonKeys,
+          duration: const Duration(milliseconds: 100),
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(40)),

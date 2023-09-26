@@ -19,8 +19,8 @@ class MagneticButton extends StatefulWidget {
   const MagneticButton({
     Key? key,
     required this.child,
-    this.mx = 0.0,
-    this.my = 0.0,
+    this.mx = 1.0,
+    this.my = 1.0,
     this.duration = const Duration(milliseconds: 200),
     this.curve = Curves.linear,
     this.height,
@@ -118,11 +118,17 @@ class MagneticButtonState extends State<MagneticButton>
 
     // Calculate the position of the mouse relative to the center of the button.
     final double relX = event.position.dx -
-        (renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2) *
-            widget.mx;
+        (renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2);
     final double relY = event.position.dy -
-        (renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2) *
-            widget.mx;
+        (renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2);
+
+    // final double relX = event.position.dx -
+    //     ((renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width / 2)) *
+    //         widget.mx;
+    // final double relY = event.position.dy -
+    //     ((renderBox.localToGlobal(Offset.zero).dy +
+    //             renderBox.size.height / 2)) *
+    //         widget.my;
 
     final double distanceMouseButton = distance(
         event.position.dx,
