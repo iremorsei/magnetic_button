@@ -10,10 +10,10 @@ class MagneticButton extends StatefulWidget {
   final Widget child;
 
   /// The horizontal offset of the magnetic widget.
-  final double mx;
+  // final double mx;
 
   /// The vertical offset of the magnetic widget.
-  final double my;
+  // final double my;
 
   /// The duration of the animation.
   final Duration duration;
@@ -39,8 +39,8 @@ class MagneticButton extends StatefulWidget {
   const MagneticButton({
     Key? key,
     required this.child,
-    this.mx = 1.0,
-    this.my = 1.0,
+    // this.mx = 1.0,
+    // this.my = 1.0,
     this.duration = const Duration(milliseconds: 200),
     this.curve = Curves.easeOutCirc,
     this.height,
@@ -188,19 +188,19 @@ class MagneticButtonState extends State<MagneticButton>
         globalPosition.dy + renderBox.size.height / 2);
 
     if (distanceMouseButton < distanceToTrigger) {
-      // Calculate the position of the mouse relative to the center of the button.
+      // Calculate the position of the hold position relative to the center of the button.
       final double relX = details.localPosition.dx -
           (globalPosition.dx + renderBox.size.width / 2);
       final double relY = details.localPosition.dy -
           (globalPosition.dy + renderBox.size.height / 2);
 
-      // If the mouse is close enough, move the button and its text.
+      // If the hold position is close enough, move the button and its text.
       setState(() {
         _textX = relX * 0.2;
         _textY = relY * 0.2;
       });
     } else if (_textX != 0.0 || _textY != 0.0) {
-      // If the mouse is not close enough, reset the button and its text to their original positions.
+      // If the hold position is not close enough, reset the button and its text to their original positions.
       setState(() {
         _textX = 0.0;
         _textY = 0.0;
