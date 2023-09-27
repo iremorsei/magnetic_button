@@ -35,9 +35,12 @@
 
 ## 0.0.7
 ### Added
-* Bug Fix & No need for InnerButtonKey use
+* Bug Fix & No need to use Global Key 
+- New properties for the magnetic widget:
+  - `mx` and `my` variables
  
 
 ### To Do
-- Implement the `mx` and `my` variables in the code for additional user experience.
+
 - test hold feature on a live mobile device.
+- add distance to trigger feature

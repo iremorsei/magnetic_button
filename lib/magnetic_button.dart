@@ -9,11 +9,11 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class MagneticButton extends StatefulWidget {
   final Widget child;
 
-  /// The horizontal offset of the magnetic widget.
-  // final double mx;
+  /// This is the horizontal offset of the magnetic widget. It determines how much the button moves in the horizontal direction (left or right) when it’s being interacted with. A larger value will result in a greater horizontal movement.
+  final double mx;
 
-  /// The vertical offset of the magnetic widget.
-  // final double my;
+  /// This is the vertical offset of the magnetic widget. It controls how much the button moves in the vertical direction (up or down) during interaction. A larger value will result in a greater vertical movemen
+  final double my;
 
   /// The duration of the animation.
   final Duration duration;
@@ -42,8 +42,8 @@ class MagneticButton extends StatefulWidget {
   const MagneticButton({
     Key? key,
     required this.child,
-    // this.mx = 1.0,
-    // this.my = 1.0,
+    this.mx = 0.2,
+    this.my = 0.2,
     this.duration = const Duration(milliseconds: 200),
     this.curve = Curves.easeOutCirc,
     this.height,
@@ -164,8 +164,8 @@ class MagneticButtonState extends State<MagneticButton>
 
       // If the mouse is close enough, move the button and its text.
       setState(() {
-        _textX = relX * 0.2;
-        _textY = relY * 0.2;
+        _textX = relX * widget.mx;
+        _textY = relY * widget.my;
         if (widget.onChanged != null) widget.onChanged!(Offset(_textX, _textY));
       });
     } else if (_textX != 0.0 || _textY != 0.0) {
@@ -205,8 +205,8 @@ class MagneticButtonState extends State<MagneticButton>
 
       // If the hold position is close enough, move the button and its text.
       setState(() {
-        _textX = relX * 0.2;
-        _textY = relY * 0.2;
+        _textX = relX * widget.mx;
+        _textY = relY * widget.my;
         if (widget.onChanged != null) widget.onChanged!(Offset(_textX, _textY));
       });
     } else if (_textX != 0.0 || _textY != 0.0) {

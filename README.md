@@ -21,17 +21,14 @@ The Magnetic Button is a custom Flutter widget that creates an interactive butto
 - **Hover Effect**: The button moves in response to the mouse position when hovered over, creating a "magnetic" effect.
 - **Return Duration**: When the mouse is not hovering over the widget, the button returns to its original position. The speed at which it returns is controlled by the `duration` property. This property is set in milliseconds, so a larger value will make the return slower, and a smaller value will make it faster.
 - **Customizable**: You can customize the child widget of the Magnetic Button to fit your needs.
-
+- **Max Movement**: You can control the maximum movement of the button in response to the mouse position using the mx and my properties.
 
 ## Usage
 
-1. First, create a GlobalKey<MagneticButtonState>:
-   ```dart
-   final innerMagneticButtonKeys = GlobalKey<MagneticButtonState>();
-
-2. Second, create a `MagneticButton` widget and pass in your desired child widget:
+1. Create a `MagneticButton` widget and pass in your desired child widget:
 
    ```dart
+  Offset values = const Offset(0, 0);
    MagneticButton(
           duration: const Duration(milliseconds: 100),
           onChanged: (Offset value) {
@@ -65,7 +62,7 @@ We’re always looking to improve the Magnetic Button and add new features that 
 
 - **On-Hold Magnetic Effect (Mobile)**: We’re planning to add an on-hold magnetic effect primarily designed for mobile devices. This feature will allow the button to continue moving in response to touch gestures, creating a more interactive user experience on mobile platforms.
 
-- **Max Movement**: You can control the maximum movement of the button in response to the mouse position using the mx and my properties.
+
 
 
 Please note that these features are planned for future releases and are subject to change. We welcome feedback and suggestions from our users. If you have an idea for a feature that you’d like to see in Magnetic Button, please let us know!
