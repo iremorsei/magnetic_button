@@ -28,6 +28,10 @@
 ### Added
 - New properties for the magnetic widget:
   - `onChanged`: A nullable callback function called when an `Offset` change event occurs.
+
+## 0.0.6
+### Added
+* Bug Fix
  
 
 ### To Do
