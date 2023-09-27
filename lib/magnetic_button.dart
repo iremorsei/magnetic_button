@@ -18,7 +18,7 @@ class MagneticButton extends StatefulWidget {
   /// The duration of the animation.
   final Duration duration;
 
-  /// calculates the distance needed for the animation of the widget to trigger. Default value is 70% of the width of the render box.
+  /// Determines the proximity at which an animation for a widget is initiated. Default value is 70% of the width of the render box.
   final double distance;
 
   /// The curve of the animation.
@@ -183,7 +183,7 @@ class MagneticButtonState extends State<MagneticButton>
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
 
     // Calculate the distance to trigger the animation.
-    final double distanceToTrigger = renderBox.size.width * 0.7;
+    final double distanceToTrigger = renderBox.size.width * widget.distance;
 
     // Get the global position of the widget.
     final Offset globalPosition = renderBox.localToGlobal(Offset.zero);

@@ -10,6 +10,7 @@ void main() {
           body: Center(
             child: MagneticButton(
               onChanged: (Offset value) {},
+              distance: 0.8,
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(40)),

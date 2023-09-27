@@ -41,7 +41,7 @@ class HomePageState extends State<HomePage> {
           onChanged: (Offset value) {
             setState(() => values = value);
           },
-          distance: 2,
+          distance: 0.8,
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(40)),
