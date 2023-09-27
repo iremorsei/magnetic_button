@@ -33,25 +33,31 @@ The Magnetic Button is a custom Flutter widget that creates an interactive butto
 
    ```dart
    MagneticButton(
-     child: Container(
-       decoration: BoxDecoration(
-         borderRadius: BorderRadius.all(Radius.circular(40)),
-         color: Colors.white,
-         border: Border.all(color: Color(0xFF303032))
-       ),
-       width: 160,
-       height: 80,
-       child: Center(
-         child: Text(
-           'Explore',
-           style: TextStyle(
-             fontWeight: FontWeight.w400,
-             fontSize: 19,
-           ),
-         ),
-       ),
-     ),
-   )
+          duration: const Duration(milliseconds: 100),
+          onChanged: (Offset value) {
+            setState(() => values = value);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(40)),
+                color: Colors.white,
+                border: Border.all(color: Colors.black)),
+            width: 160,
+            height: 80,
+            child: Center(
+              child: Transform.translate(
+                offset: Offset(values.dx / 4, values.dy / 4),
+                child: const Text(
+                  'Explore',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 19,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
 
 ## Future Features
 

@@ -63,12 +63,10 @@ class MagneticButtonState extends State<MagneticButton>
   late AnimationController _animationController;
   late Animation<double> _animation;
 
+  final magneticButtonKey = GlobalKey();
+
   double _textX = 0.0;
   double _textY = 0.0;
-
-  Offset getCoordinates() {
-    return Offset(_textX, _textY);
-  }
 
   bool mouseIsHovering = false;
 
