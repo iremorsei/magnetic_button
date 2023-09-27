@@ -24,6 +24,12 @@
   - reduced the number of times renderBox.localToGlobal(Offset.zero) is called
   - moved the calculations for relX and relY inside the if (distanceMouseButton < distanceToTrigger) statement, so they’re only calculated if necessary.
 
+## 0.0.5
+### Added
+- New properties for the magnetic widget:
+  - `onChanged`: A nullable callback function called when an `Offset` change event occurs.
+ 
+
 ### To Do
 - Implement the `mx` and `my` variables in the code for additional user experience.
 - test hold feature on a live mobile device.
