@@ -32,6 +32,10 @@
 ## 0.0.6
 ### Added
 * Bug Fix
+
+## 0.0.7
+### Added
+* Bug Fix & No need for InnerButtonKey use
  
 
 ### To Do

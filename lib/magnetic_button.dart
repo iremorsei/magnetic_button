@@ -33,8 +33,8 @@ class MagneticButton extends StatefulWidget {
   /// A boolean value indicating whether the widget should respond to long press events on mobile. If false only Web will work.
   final bool mobile;
 
-  /// A global key used to access the state of an inner MagneticButton. This is an optional parameter. final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
-  final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
+  // /// A global key used to access the state of an inner MagneticButton. This is an optional parameter. final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
+  // final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
 
   /// A nullable callback function called when an `Offset` change event occurs.
   final ValueChanged<Offset>? onChanged;
@@ -49,7 +49,7 @@ class MagneticButton extends StatefulWidget {
     this.height,
     this.width,
     this.padding,
-    this.innerMagneticButtonKey,
+    // this.innerMagneticButtonKey,
     this.mobile = true,
     this.onChanged,
   }) : super(key: key);
@@ -62,8 +62,7 @@ class MagneticButtonState extends State<MagneticButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
-
-  final magneticButtonKey = GlobalKey();
+  final Key key = GlobalKey();
 
   double _textX = 0.0;
   double _textY = 0.0;
@@ -111,8 +110,9 @@ class MagneticButtonState extends State<MagneticButton>
   void _handleMouseLeave(PointerExitEvent event) {
     mouseIsHovering = false;
     // Check if mouse is still hovering over inner MagneticButton
-    if (widget.innerMagneticButtonKey != null &&
-        !widget.innerMagneticButtonKey!.currentState!.mouseIsHovering) {
+    // if (widget.innerMagneticButtonKey != null &&
+    //     !widget.innerMagneticButtonKey!.currentState!.mouseIsHovering) {
+    if (mouseIsHovering) {
       setState(() {
         _textX = 0.0;
         _textY = 0.0;
@@ -258,7 +258,7 @@ class MagneticButtonState extends State<MagneticButton>
 
   Widget _buildAnimatedContainer() {
     return AnimatedContainer(
-      key: widget.innerMagneticButtonKey,
+      key: key,
       duration: widget.duration,
       height: widget.height,
       width: widget.width,
