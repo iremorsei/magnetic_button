@@ -51,7 +51,7 @@ class MagneticButton extends StatefulWidget {
     this.padding,
     this.innerMagneticButtonKey,
     this.mobile = true,
-    required this.onChanged,
+    this.onChanged,
   }) : super(key: key);
 
   @override
