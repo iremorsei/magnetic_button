@@ -1,6 +1,6 @@
 name: magnetic_button
 description: A Flutter package that provides a button with a unique "magnetic" hover effect.
-version: 0.0.7
+version: 0.0.8
 homepage: https://github.com/darksabotage1/magnetic_button
 issue_tracker: https://github.com/darksabotage1/magnetic_button/issues
 documentation: https://github.com/darksabotage1/magnetic_button/blob/main/README.md
