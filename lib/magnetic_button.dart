@@ -12,11 +12,14 @@ class MagneticButton extends StatefulWidget {
   /// This is the horizontal offset of the magnetic widget. It determines how much the button moves in the horizontal direction (left or right) when it’s being interacted with. A larger value will result in a greater horizontal movement.
   final double mx;
 
-  /// This is the vertical offset of the magnetic widget. It controls how much the button moves in the vertical direction (up or down) during interaction. A larger value will result in a greater vertical movemen
+  /// This is the vertical offset of the magnetic widget. It controls how much the button moves in the vertical direction (up or down) during interaction. A larger value will result in a greater vertical movement
   final double my;
 
   /// The duration of the animation.
   final Duration duration;
+
+  /// Determines the proximity at which an animation for a widget is initiated. Default value is 70% of the width of the render box.
+  final double distance;
 
   /// The curve of the animation.
   final Curve curve;
@@ -33,9 +36,6 @@ class MagneticButton extends StatefulWidget {
   /// A boolean value indicating whether the widget should respond to long press events on mobile. If false only Web will work.
   final bool mobile;
 
-  // /// A global key used to access the state of an inner MagneticButton. This is an optional parameter. final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
-  // final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
-
   /// A nullable callback function called when an `Offset` change event occurs.
   final ValueChanged<Offset>? onChanged;
 
@@ -49,9 +49,9 @@ class MagneticButton extends StatefulWidget {
     this.height,
     this.width,
     this.padding,
-    // this.innerMagneticButtonKey,
     this.mobile = true,
     this.onChanged,
+    this.distance = 0.7,
   }) : super(key: key);
 
   @override
@@ -110,9 +110,7 @@ class MagneticButtonState extends State<MagneticButton>
   void _handleMouseLeave(PointerExitEvent event) {
     mouseIsHovering = false;
     // Check if mouse is still hovering over inner MagneticButton
-    // if (widget.innerMagneticButtonKey != null &&
-    //     !widget.innerMagneticButtonKey!.currentState!.mouseIsHovering) {
-    if (mouseIsHovering) {
+    if (!mouseIsHovering) {
       setState(() {
         _textX = 0.0;
         _textY = 0.0;
@@ -144,7 +142,7 @@ class MagneticButtonState extends State<MagneticButton>
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
 
     // Calculate the distance to trigger the animation.
-    final double distanceToTrigger = renderBox.size.width * 0.7;
+    final double distanceToTrigger = renderBox.size.width * widget.distance;
 
     // Get the global position of the widget.
     final Offset globalPosition = renderBox.localToGlobal(Offset.zero);
@@ -185,7 +183,7 @@ class MagneticButtonState extends State<MagneticButton>
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
 
     // Calculate the distance to trigger the animation.
-    final double distanceToTrigger = renderBox.size.width * 0.7;
+    final double distanceToTrigger = renderBox.size.width * widget.distance;
 
     // Get the global position of the widget.
     final Offset globalPosition = renderBox.localToGlobal(Offset.zero);
@@ -219,6 +217,7 @@ class MagneticButtonState extends State<MagneticButton>
     }
   }
 
+  // If hold is not pressed or exit, reset the button and its text to their original positions.
   void _handleHoldLeave() {
     setState(() {
       _textX = 0.0;

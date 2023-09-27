@@ -14,7 +14,7 @@ The Magnetic Button is a custom Flutter widget that creates an interactive butto
 
 ## Untested Features
 
-- **On-Hold Magnetic Effect (Mobile)**: We’re planning to add an on-hold magnetic effect primarily designed for mobile devices. This feature will allow the button to continue moving in response to touch gestures, creating a more interactive user experience on mobile platforms.
+- **Mobile On-Hold Magnetic Effect(Undergoing Testing)**: We are currently in the testing phase for an on-hold magnetic effect specifically designed for mobile devices. This functionality is intended to enable buttons to maintain their movement in response to hold gestures, enhancing interactivity on mobile platforms."
 
 ## Features
 
@@ -22,13 +22,14 @@ The Magnetic Button is a custom Flutter widget that creates an interactive butto
 - **Return Duration**: When the mouse is not hovering over the widget, the button returns to its original position. The speed at which it returns is controlled by the `duration` property. This property is set in milliseconds, so a larger value will make the return slower, and a smaller value will make it faster.
 - **Customizable**: You can customize the child widget of the Magnetic Button to fit your needs.
 - **Max Movement**: You can control the maximum movement of the button in response to the mouse position using the mx and my properties.
+- **Distance to Trigger**: A customizable parameter that determines the proximity at which an animation for a widget is initiated.
 
 ## Usage
 
 1. Create a `MagneticButton` widget and pass in your desired child widget:
 
    ```dart
-  Offset values = const Offset(0, 0);
+   Offset values = const Offset(0, 0);
    MagneticButton(
           duration: const Duration(milliseconds: 100),
           onChanged: (Offset value) {
@@ -58,11 +59,4 @@ The Magnetic Button is a custom Flutter widget that creates an interactive butto
 
 ## Future Features
 
-We’re always looking to improve the Magnetic Button and add new features that enhance its functionality and user experience. Here are some features we’re planning to implement in the future:
-
-- **On-Hold Magnetic Effect (Mobile)**: We’re planning to add an on-hold magnetic effect primarily designed for mobile devices. This feature will allow the button to continue moving in response to touch gestures, creating a more interactive user experience on mobile platforms.
-
-
-
-
-Please note that these features are planned for future releases and are subject to change. We welcome feedback and suggestions from our users. If you have an idea for a feature that you’d like to see in Magnetic Button, please let us know!
+We have successfully integrated all the proposed features for the Magnetic Button, except ‘Mobile On-Hold Magnetic Effect’ feature, which is currently undergoing testing. At this point, we have no additional features planned for future implementation. However, we welcome feedback and suggestions from our users. If you have an idea for a feature that you’d like to see in Magnetic Button, please let us know! 🙂. 
