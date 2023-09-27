@@ -37,10 +37,15 @@
 ### Added
 * Bug Fix & No need to use Global Key 
 - New properties for the magnetic widget:
-  - `mx` and `my` variables
+  - `mx`: This is the horizontal offset of the magnetic widget
+  - `my`: This is the vertical offset of the magnetic widget
+
+## 0.0.8
+### Added
+* Minor Bug Fix
+- New property for the magnetic widget::
+  - `distance`: Determines the proximity at which an animation for a widget is initiated.
  
 
 ### To Do
-
 - test hold feature on a live mobile device.
-- add distance to trigger feature
