@@ -31,7 +31,7 @@
 
 ## 0.0.6
 ### Added
-* Bug Fix
+* Major Bug Fix
 
 ## 0.0.7
 ### Added
