@@ -3,14 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:magnetic_button/magnetic_button.dart';
 
 void main() {
-  final innerMagneticButtonKeys = GlobalKey<MagneticButtonState>();
   testWidgets('Check MagneticWidget exists', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: Center(
             child: MagneticButton(
-              key: innerMagneticButtonKeys,
+              onChanged: (Offset value) {},
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(40)),

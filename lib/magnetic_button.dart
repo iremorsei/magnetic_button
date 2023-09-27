@@ -36,6 +36,9 @@ class MagneticButton extends StatefulWidget {
   /// A global key used to access the state of an inner MagneticButton. This is an optional parameter. final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
   final GlobalKey<MagneticButtonState>? innerMagneticButtonKey;
 
+  /// A nullable callback function called when an `Offset` change event occurs.
+  final ValueChanged<Offset>? onChanged;
+
   const MagneticButton({
     Key? key,
     required this.child,
@@ -48,6 +51,7 @@ class MagneticButton extends StatefulWidget {
     this.padding,
     this.innerMagneticButtonKey,
     this.mobile = true,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -61,6 +65,10 @@ class MagneticButtonState extends State<MagneticButton>
 
   double _textX = 0.0;
   double _textY = 0.0;
+
+  Offset getCoordinates() {
+    return Offset(_textX, _textY);
+  }
 
   bool mouseIsHovering = false;
 
@@ -110,6 +118,7 @@ class MagneticButtonState extends State<MagneticButton>
       setState(() {
         _textX = 0.0;
         _textY = 0.0;
+        widget.onChanged!(const Offset(0, 0));
       });
       if (_animationController.status != AnimationStatus.forward) {
         _animationController.forward();
@@ -159,12 +168,14 @@ class MagneticButtonState extends State<MagneticButton>
       setState(() {
         _textX = relX * 0.2;
         _textY = relY * 0.2;
+        widget.onChanged!(Offset(_textX, _textY));
       });
     } else if (_textX != 0.0 || _textY != 0.0) {
       // If the mouse is not close enough, reset the button and its text to their original positions.
       setState(() {
         _textX = 0.0;
         _textY = 0.0;
+        widget.onChanged!(Offset(_textX, _textY));
       });
     }
   }
@@ -198,12 +209,14 @@ class MagneticButtonState extends State<MagneticButton>
       setState(() {
         _textX = relX * 0.2;
         _textY = relY * 0.2;
+        widget.onChanged!(Offset(_textX, _textY));
       });
     } else if (_textX != 0.0 || _textY != 0.0) {
       // If the hold position is not close enough, reset the button and its text to their original positions.
       setState(() {
         _textX = 0.0;
         _textY = 0.0;
+        widget.onChanged!(Offset(_textX, _textY));
       });
     }
   }
@@ -212,6 +225,7 @@ class MagneticButtonState extends State<MagneticButton>
     setState(() {
       _textX = 0.0;
       _textY = 0.0;
+      widget.onChanged!(Offset(_textX, _textY));
     });
 
     if (_animationController.status != AnimationStatus.forward) {
@@ -246,6 +260,7 @@ class MagneticButtonState extends State<MagneticButton>
 
   Widget _buildAnimatedContainer() {
     return AnimatedContainer(
+      key: widget.innerMagneticButtonKey,
       duration: widget.duration,
       height: widget.height,
       width: widget.width,
@@ -255,11 +270,7 @@ class MagneticButtonState extends State<MagneticButton>
         _textY * (1 - _animation.value),
         0.0,
       ),
-      child: Transform.translate(
-        offset: Offset(_textX / 4 * (1 - _animation.value),
-            _textY / 4 * (1 - _animation.value)),
-        child: widget.child,
-      ),
+      child: widget.child,
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:magnetic_button/magnetic_button.dart';
 
 void main() {
@@ -13,27 +12,35 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Magnetic Button',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
-  final innerMagneticButtonKeys = GlobalKey<MagneticButtonState>();
+  @override
+  State<HomePage> createState() => HomePageState();
+}
+
+class HomePageState extends State<HomePage> {
+  Offset values = const Offset(0, 0);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: MagneticButton(
-          key: innerMagneticButtonKeys,
           duration: const Duration(milliseconds: 100),
+          onChanged: (Offset value) {
+            setState(() => values = value);
+          },
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(40)),
@@ -41,12 +48,15 @@ class HomePage extends StatelessWidget {
                 border: Border.all(color: Colors.black)),
             width: 160,
             height: 80,
-            child: const Center(
-              child: Text(
-                'Explore',
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 19,
+            child: Center(
+              child: Transform.translate(
+                offset: Offset(values.dx / 4, values.dy / 4),
+                child: const Text(
+                  'Explore',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 19,
+                  ),
                 ),
               ),
             ),
